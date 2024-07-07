@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Cash Registers</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+          integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+          integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+          crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+          integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+          crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container">
+  <h2 class="text-center">Cash Registers</h2>
+
+  <!-- Search Form -->
+  <div style="text-align: center; margin-bottom: 20px;">
+    <form th:action="@{/cash_registers/search}" method="get" class="search-form">
+      <input class="search-input" type="text" name="name" placeholder="Search by Name..." th:value="${name}" />
+      <input class="search-input" type="text" name="balance" placeholder="Search by Balance..." th:value="${balance}" />
+      <button class="search-button" type="submit">Search</button>
+      <button class="search-button" type="button" onclick="window.location.href='/cash_registers'">Clear</button>
+    </form>
+  </div>
+
+  <!-- Success and Error Messages -->
+  <div th:if="${transferConfirmation}">
+    <div class="alert alert-success" role="alert">
+      Transfer successful! Your confirmation code is: <span th:text="${transactionId}">123456</span>
+    </div>
+  </div>
+  <div th:if="${error}">
+    <div class="alert alert-danger" role="alert">
+      <span th:text="${error}">Transfer failed.</span>
+    </div>
+  </div>
+
+  <!-- Cash Registers List -->
+  <div class="row">
+    <div class="col-md-4" th:each="cashRegister : ${cashRegisters}">
+      <div class="card" style="margin-bottom: 20px;">
+        <a th:href="@{/cash_registers/{cashRegisterId}/CashRegisterById(cashRegisterId=${cashRegister.id})}">
+          <img th:src="@{${cashRegister.urlImage}}" style="object-fit: cover; width: 100%; height: 170px;" class="card-img-top" alt="Cash Register image">
+        </a>
+        <div class="card-body">
+          <h3 class="card-title" th:text="${cashRegister.name}">Card Name</h3>
+          <!-- Display balance with currency -->
+          <p class="card-text">
+            Balance: <span th:text="${cashRegister.balance}"></span> <span th:text="${cashRegister.currency}"></span>
+          </p>
+          <div class="text-center">
+            <a th:href="@{/cash_registers/update/{cashRegisterId}(cashRegisterId=${cashRegister.id})}">
+              <button class="btn btn-primary" type="button">Update</button>
+            </a>
+            <a th:href="@{/cash_registers/delete/{cashRegisterId}(cashRegisterId=${cashRegister.id})}">
+              <button class="btn btn-danger" type="button">Delete</button>
+            </a>
+            <!-- Toggle Transfer Funds Form -->
+            <a href="#transferForm-${cashRegister.id}" class="btn btn-secondary" data-toggle="collapse">Transfer Funds</a>
+          </div>
+          <!-- Transfer Funds Form (collapsed by default) -->
+          <div id="transferForm-${cashRegister.id}" class="collapse transfer-form" style="margin-top: 20px;">
+            <form th:action="@{/cash_registers/transfer}" method="post">
+              <!-- Transfer Funds Form fields -->
+              <input type="hidden" name="sourceId" th:value="${cashRegister.id}">
+              <div class="form-group">
+                <label for="destinationId">Destination Card ID</label>
+                <input type="text" class="form-control" id="destinationId" name="destinationId" required>
+              </div>
+              <div class="form-group">
+                <label for="amount">Amount</label>
+                <input type="number" class="form-control" id="amount" name="amount" required>
+              </div>
+              <div class="form-group">
+                <label for="currency">Currency</label>
+                <select class="form-control" id="currency" name="currency" required>
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                  <option value="RUB">RUB</option>
+                  <option value="SOM">SOM</option>
+                  <option value="TENGE">TENGE</option>
+                  <!-- Add other currencies as needed -->
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="senderName">Sender's Full Name</label>
+                <input type="text" class="form-control" id="senderName" name="senderName" required>
+              </div>
+              <div class="form-group">
+                <label for="receiverName">Receiver's Full Name</label>
+                <input type="text" class="form-control" id="receiverName" name="receiverName" required>
+              </div>
+              <div class="form-group">
+                <label for="senderPhone">Sender's Phone Number</label>
+                <input type="text" class="form-control" id="senderPhone" name="senderPhone" required>
+              </div>
+              <div class="form-group">
+                <label for="receiverPhone">Receiver's Phone Number</label>
+                <input type="text" class="form-control" id="receiverPhone" name="receiverPhone" required>
+              </div>
+              <div class="form-group">
+                <label for="comment">Comment</label>
+                <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Transfer</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add new Cash Register Button -->
+  <div class="text-center" style="margin-top: 20px;">
+    <a class="btn btn-outline-primary" role="button" th:href="@{/cash_registers/create}">Add new Cash Register</a>
+  </div>
+</div>
+
+</body>
+</html>

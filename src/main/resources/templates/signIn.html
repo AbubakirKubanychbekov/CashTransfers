@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign In</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style>
+    .form-group {
+      max-width: 400px;
+      margin: auto;
+    }
+    .password-wrapper {
+      position: relative;
+    }
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+    .button-wrapper {
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2 class="text-center">Sign In</h2>
+  <form th:action="@{/auth/signin}" method="post">
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+    <div class="form-group password-wrapper">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" id="password" name="password" required>
+      <span class="toggle-password" onclick="togglePassword()">👁️</span>
+    </div>
+    <div th:if="${error}" class="alert alert-danger">
+      <span th:text="${error}"></span>
+    </div>
+    <div class="button-wrapper">
+      <button type="submit" class="btn btn-primary">Sign In</button>
+    </div>
+  </form>
+</div>
+<script>
+  function togglePassword() {
+    var passwordInput = document.getElementById("password");
+    var passwordIcon = document.querySelector(".toggle-password");
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      passwordIcon.textContent = "🙈";
+    } else {
+      passwordInput.type = "password";
+      passwordIcon.textContent = "👁️";
+    }
+  }
+</script>
+</body>
+</html>
