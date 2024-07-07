@@ -25,7 +25,7 @@ public class SecurityConfig {
                     return corsConfig;
                 }))
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers("/cash_registers/**",
+                        .requestMatchers("/", "/home","/cash_registers/**",
                                 "/cash_registers/create",
                                 "/cash_registers/save",
                                 "/cash_registers/transfer",

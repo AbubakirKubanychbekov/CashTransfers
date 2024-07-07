@@ -34,4 +34,6 @@ public interface CashRegisterService {
     Health health();
 
     PaginationResponse getAllPagination(int currentPage, int pageSize);
+
+    List<CashRegister> findByUser(User currentUser);
 }

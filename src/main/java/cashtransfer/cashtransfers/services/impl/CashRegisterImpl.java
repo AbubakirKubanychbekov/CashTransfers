@@ -181,6 +181,11 @@ public class CashRegisterImpl implements CashRegisterService {
     }
 
     @Override
+    public List<CashRegister> findByUser(User currentUser) {
+        return cashRegisterRepository.findByUser(currentUser);
+    }
+
+    @Override
     public PaginationResponse getAllPagination(int currentPage, int pageSize) {
         Pageable pageable =PageRequest.of(currentPage-1,pageSize);
         Page<CashRegister>cashRegisters = cashRegisterRepository.findAllCashes(pageable);
