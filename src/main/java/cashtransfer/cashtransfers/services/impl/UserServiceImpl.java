@@ -2,6 +2,7 @@ package cashtransfer.cashtransfers.services.impl;
 
 import cashtransfer.cashtransfers.entities.User;
 import cashtransfer.cashtransfers.enums.Role;
+import cashtransfer.cashtransfers.exceptions.NotFoundException;
 import cashtransfer.cashtransfers.repositories.UserRepository;
 import cashtransfer.cashtransfers.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -62,8 +63,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        logger.error("User by email " +  email + " not found");
         return Optional.ofNullable(userRepository.getUserByEmail(email).orElseThrow(
-                () -> new RuntimeException("User not found")));
+                () -> new NotFoundException("User not found")));
     }
 }

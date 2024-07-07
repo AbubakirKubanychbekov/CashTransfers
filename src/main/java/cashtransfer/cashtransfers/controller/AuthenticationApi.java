@@ -5,9 +5,6 @@ import cashtransfer.cashtransfers.services.CashRegisterService;
 import cashtransfer.cashtransfers.services.UserService;
 import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,28 +51,6 @@ public class AuthenticationApi {
         }
     }
 
-//    @PostMapping("/signup")
-//    public String signUp(@RequestParam String email,
-//                         @RequestParam String password,
-//                         RedirectAttributes redirectAttributes) {
-//        try {
-//            // Регистрируем пользователя
-//            userService.register(email, password);
-//
-//            // Получаем информацию о новом пользователе
-//            User newUser = userService.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-//
-//            // Создаем новый кассовый регистр для нового пользователя, если его еще нет
-//            if (!cashRegisterService.existsByUser(newUser)) {
-//            }
-//
-//            return "redirect:/cash_registers";
-//        } catch (Exception e) {
-//            redirectAttributes.addFlashAttribute("error", "Registration failed: " + e.getMessage());
-//            return "redirect:/auth/signup";
-//        }
-//    }
-
     @PostMapping("/signup")
     public String signUp(@RequestParam String email,
                          @RequestParam String password,
@@ -87,11 +62,10 @@ public class AuthenticationApi {
             // Получаем информацию о новом пользователе
             User newUser = userService.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
 
-            // Устанавливаем пользователя в контекст аутентификации
-            Authentication authentication = new UsernamePasswordAuthenticationToken(newUser, null, newUser.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            // Создаем новый кассовый регистр для нового пользователя, если его еще нет
+            if (!cashRegisterService.existsByUser(newUser)) {
+            }
 
-            // После успешной регистрации делаем редирект на защищенную страницу
             return "redirect:/cash_registers";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Registration failed: " + e.getMessage());

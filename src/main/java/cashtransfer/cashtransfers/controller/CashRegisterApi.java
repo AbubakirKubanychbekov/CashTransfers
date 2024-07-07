@@ -6,13 +6,11 @@ import cashtransfer.cashtransfers.entities.User;
 import cashtransfer.cashtransfers.services.CashRegisterService;
 import cashtransfer.cashtransfers.services.UserService;
 import jakarta.annotation.security.PermitAll;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import jakarta.validation.constraints.Min;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import jakarta.validation.constraints.Min;
 
 import java.util.List;
 
@@ -95,7 +93,6 @@ public class CashRegisterApi {
         cashRegisterService.save(cashRegister);
         return "redirect:/cash_registers";
     }
-
 
     @GetMapping("/update/{cashRegisterId}")
     String updatePage(@PathVariable Long cashRegisterId, Model model) {

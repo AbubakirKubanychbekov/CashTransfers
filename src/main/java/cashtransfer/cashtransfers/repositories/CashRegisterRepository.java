@@ -26,6 +26,4 @@ public interface CashRegisterRepository extends JpaRepository<CashRegister,Long>
 
     @Query("select new cashtransfer.cashtransfers.entities.CashRegister(c.id,c.name,c.balance,c.currency,c.urlImage) from CashRegister c")
     Page<CashRegister> findAllCashes(Pageable pageable);
-
-    List<CashRegister> findByUser(User currentUser);
 }
