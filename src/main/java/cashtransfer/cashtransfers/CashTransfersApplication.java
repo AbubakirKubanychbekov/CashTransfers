@@ -8,6 +8,5 @@ public class CashTransfersApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(CashTransfersApplication.class, args);
-        System.out.println("Boss your code successfully working...");
     }
 }
