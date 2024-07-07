@@ -1,5 +1,6 @@
 package cashtransfer.cashtransfers.services;
 
+import cashtransfer.cashtransfers.dto.response.PaginationResponse;
 import cashtransfer.cashtransfers.entities.CashRegister;
 import cashtransfer.cashtransfers.entities.User;
 import org.springframework.boot.actuate.health.Health;
@@ -31,4 +32,6 @@ public interface CashRegisterService {
     boolean existsByUser(User newUser);
 
     Health health();
+
+    PaginationResponse getAllPagination(int currentPage, int pageSize);
 }

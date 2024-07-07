@@ -2,6 +2,8 @@ package cashtransfer.cashtransfers.repositories;
 
 import cashtransfer.cashtransfers.entities.CashRegister;
 import cashtransfer.cashtransfers.entities.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +23,7 @@ public interface CashRegisterRepository extends JpaRepository<CashRegister,Long>
     List<CashRegister> findByCriteria(@Param("name") String name, @Param("balance") Double balance);
 
     boolean existsByUser(User user);
+
+    @Query("select new cashtransfer.cashtransfers.entities.CashRegister(c.id,c.name,c.balance,c.currency,c.urlImage) from CashRegister c")
+    Page<CashRegister> findAllCashes(Pageable pageable);
 }

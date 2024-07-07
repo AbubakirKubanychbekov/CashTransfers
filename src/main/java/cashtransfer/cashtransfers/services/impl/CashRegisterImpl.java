@@ -1,5 +1,6 @@
 package cashtransfer.cashtransfers.services.impl;
 
+import cashtransfer.cashtransfers.dto.response.PaginationResponse;
 import cashtransfer.cashtransfers.entities.CashRegister;
 import cashtransfer.cashtransfers.entities.Transfer;
 import cashtransfer.cashtransfers.entities.User;
@@ -20,11 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,6 +64,7 @@ public class CashRegisterImpl implements CashRegisterService {
             return Health.down().withDetail("Error", "Something went wrong").build(); // Приложение не работает
         }
     }
+
 
     @Transactional
     @Override
@@ -164,7 +168,6 @@ public class CashRegisterImpl implements CashRegisterService {
         return cashRegisterRepository.findByCriteria(name, balance);
     }
 
-
     @PostConstruct
     public void initMethod(){
         User u = User.builder()
@@ -175,5 +178,16 @@ public class CashRegisterImpl implements CashRegisterService {
                 .role(Role.OWNER_CARD)
                 .build();
         userRepository.save(u);
+    }
+
+    @Override
+    public PaginationResponse getAllPagination(int currentPage, int pageSize) {
+        Pageable pageable =PageRequest.of(currentPage-1,pageSize);
+        Page<CashRegister>cashRegisters = cashRegisterRepository.findAllCashes(pageable);
+        return PaginationResponse.builder()
+                .t(Collections.singletonList(cashRegisters.getContent()))
+                .currentPage(cashRegisters.getNumber())
+                .pageSize(cashRegisters.getTotalPages())
+                .build();
     }
 }

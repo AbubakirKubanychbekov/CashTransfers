@@ -1,14 +1,17 @@
 package cashtransfer.cashtransfers.controller;
 
+import cashtransfer.cashtransfers.dto.response.PaginationResponse;
 import cashtransfer.cashtransfers.entities.CashRegister;
 import cashtransfer.cashtransfers.entities.User;
 import cashtransfer.cashtransfers.services.CashRegisterService;
 import cashtransfer.cashtransfers.services.UserService;
 import jakarta.annotation.security.PermitAll;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import jakarta.validation.constraints.Min;
 
 import java.util.List;
 
@@ -127,6 +130,24 @@ public class CashRegisterApi {
         model.addAttribute("urlImage", urlImage);
         model.addAttribute("cashRegisters", cashRegisters);
 
+        return "cashRegister/findAll";
+    }
+
+    @GetMapping("/pagination")
+    public String paginationResponse(
+            @RequestParam @Min(1) int currentPage,
+            @RequestParam @Min(1) int pageSize,
+            Model model
+    ) {
+        if (currentPage < 1 || pageSize < 1) {
+            return "redirect:/error";
+        }
+
+        PaginationResponse response = cashRegisterService.getAllPagination(currentPage, pageSize);
+        model.addAttribute("cashRegisters", response.getCashRegisters());
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("totalPages", response.getTotalPages());
         return "cashRegister/findAll";
     }
 }
