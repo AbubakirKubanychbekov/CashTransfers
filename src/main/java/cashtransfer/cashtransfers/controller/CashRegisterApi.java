@@ -71,27 +71,13 @@ public class CashRegisterApi {
         }
     }
 
-//    @GetMapping()
-//    @PermitAll
-//    String findAll(Model model) {
-//        List<CashRegister> allCashRegisters = cashRegisterService.findAll();
-//        model.addAttribute("cashRegisters", allCashRegisters);
-//        return "cashRegister/findAll";
-//    }
-
     @GetMapping()
     @PermitAll
-    String findAll(Model model, Authentication authentication) {
-        // Получаем текущего пользователя из контекста аутентификации
-        User currentUser = (User) authentication.getPrincipal();
-
-        // Получаем все кассовые регистры, принадлежащие текущему пользователю
-        List<CashRegister> userCashRegisters = cashRegisterService.findByUser(currentUser);
-
-        model.addAttribute("cashRegisters", userCashRegisters);
+    String findAll(Model model) {
+        List<CashRegister> allCashRegisters = cashRegisterService.findAll();
+        model.addAttribute("cashRegisters", allCashRegisters);
         return "cashRegister/findAll";
     }
-
 
     @GetMapping("/create")
     @PermitAll
@@ -103,20 +89,12 @@ public class CashRegisterApi {
     @PostMapping("/save")
     @PermitAll
     public String saveCashRegister(@ModelAttribute("newCashRegister") CashRegister cashRegister,
-                                   @RequestParam("email") String email, Authentication authentication) {
-        User currentUser = (User) authentication.getPrincipal();
+                                   @RequestParam("email") String email) {
         User user = userService.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-
-        // Проверяем, что текущий пользователь сохраняет кассовый регистр себе
-        if (!currentUser.equals(user)) {
-            throw new IllegalArgumentException("You can only save cash registers for yourself");
-        }
-
         cashRegister.setUser(user);
         cashRegisterService.save(cashRegister);
         return "redirect:/cash_registers";
     }
-
 
 
     @GetMapping("/update/{cashRegisterId}")

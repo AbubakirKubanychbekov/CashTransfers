@@ -6,7 +6,6 @@ import cashtransfer.cashtransfers.entities.Transfer;
 import cashtransfer.cashtransfers.entities.User;
 import cashtransfer.cashtransfers.enums.Role;
 import cashtransfer.cashtransfers.enums.Status;
-import cashtransfer.cashtransfers.exceptions.NotFoundException;
 import cashtransfer.cashtransfers.repositories.CashRegisterRepository;
 import cashtransfer.cashtransfers.repositories.TransferRepository;
 import cashtransfer.cashtransfers.repositories.UserRepository;
@@ -138,13 +137,13 @@ public class CashRegisterImpl implements CashRegisterService {
     @Override
     public CashRegister findById(Long cashRegisterId) {
         return cashRegisterRepository.findById(cashRegisterId).orElseThrow(()->
-                new NotFoundException("Cash Register by id "+ cashRegisterId + " not found"));
+                new RuntimeException("Cash Register by id "+ cashRegisterId + " not found"));
     }
 
     @Override
     public void update(Long cashRegisterId, CashRegister newCashRegister) {
        CashRegister cashRegister = cashRegisterRepository.findById(cashRegisterId).orElseThrow(()->
-               new NotFoundException("Cash Register by id "+ cashRegisterId + " not found"));
+               new RuntimeException("Cash Register by id "+ cashRegisterId + " not found"));
        cashRegister.setName(newCashRegister.getName());
        cashRegister.setBalance(newCashRegister.getBalance());
        cashRegisterRepository.save(cashRegister);
@@ -180,10 +179,6 @@ public class CashRegisterImpl implements CashRegisterService {
         userRepository.save(u);
     }
 
-    @Override
-    public List<CashRegister> findByUser(User currentUser) {
-        return cashRegisterRepository.findByUser(currentUser);
-    }
 
     @Override
     public PaginationResponse getAllPagination(int currentPage, int pageSize) {
