@@ -13,5 +13,4 @@ public class CashRegisterRequest {
     private String name;
     private Double balance;
     private String urlImage;
-
 }

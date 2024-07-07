@@ -10,5 +10,4 @@ public class CashTransfersApplication {
         SpringApplication.run(CashTransfersApplication.class, args);
         System.out.println("Boss your code successfully working...");
     }
-
 }

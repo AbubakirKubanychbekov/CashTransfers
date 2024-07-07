@@ -41,5 +41,4 @@ public class Transfer {
     private String comment;
     @Enumerated(EnumType.STRING)
     private Status status;
-
 }

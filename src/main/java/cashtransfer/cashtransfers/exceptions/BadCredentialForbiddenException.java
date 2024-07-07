@@ -5,3 +5,4 @@ public class BadCredentialForbiddenException extends RuntimeException{
         super(message);
     }
 }
+
