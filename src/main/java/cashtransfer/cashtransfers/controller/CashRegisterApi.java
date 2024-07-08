@@ -7,6 +7,7 @@ import cashtransfer.cashtransfers.services.CashRegisterService;
 import cashtransfer.cashtransfers.services.UserService;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.constraints.Min;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,7 @@ public class CashRegisterApi {
     }
 
     @PostMapping("/transfer")
+    @PreAuthorize("hasAnyAuthority('OWNER_CARD')")
     public String transferFunds(@RequestParam Long sourceId,
                                 @RequestParam Long destinationId,
                                 @RequestParam Double amount,
@@ -70,7 +72,7 @@ public class CashRegisterApi {
     }
 
     @GetMapping()
-    @PermitAll
+    @PreAuthorize("hasAnyAuthority('OWNER_CARD')")
     String findAll(Model model) {
         List<CashRegister> allCashRegisters = cashRegisterService.findAll();
         model.addAttribute("cashRegisters", allCashRegisters);
@@ -78,14 +80,14 @@ public class CashRegisterApi {
     }
 
     @GetMapping("/create")
-    @PermitAll
+    @PreAuthorize("hasAnyAuthority('OWNER_CARD')")
     String createCashRegister(Model model) {
         model.addAttribute("newCashRegister", new CashRegister());
         return "cashRegister/savePage";
     }
 
     @PostMapping("/save")
-    @PermitAll
+    @PreAuthorize("hasAnyAuthority('OWNER_CARD')")
     public String saveCashRegister(@ModelAttribute("newCashRegister") CashRegister cashRegister,
                                    @RequestParam("email") String email) {
         User user = userService.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));

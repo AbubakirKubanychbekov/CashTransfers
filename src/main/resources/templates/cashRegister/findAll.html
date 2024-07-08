@@ -63,6 +63,8 @@
             </a>
             <!-- Toggle Transfer Funds Form -->
             <a href="#transferForm-${cashRegister.id}" class="btn btn-secondary" data-toggle="collapse">Transfer Funds</a>
+            <!-- Toggle Confirm Transfer Form -->
+            <a href="#confirmTransferForm-${cashRegister.id}" class="btn btn-warning" data-toggle="collapse">Confirm Transfer</a>
           </div>
           <!-- Transfer Funds Form (collapsed by default) -->
           <div id="transferForm-${cashRegister.id}" class="collapse transfer-form" style="margin-top: 20px;">
@@ -109,6 +111,22 @@
                 <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
               </div>
               <button type="submit" class="btn btn-primary">Transfer</button>
+            </form>
+          </div>
+
+          <!-- Confirm Transfer Form (collapsed by default) -->
+          <div id="confirmTransferForm-${cashRegister.id}" class="collapse confirm-transfer-form" style="margin-top: 20px;">
+            <form th:action="@{/confirm-transfer}" method="post">
+              <!-- Confirm Transfer Form fields -->
+              <div class="form-group">
+                <label for="transactionId">Transaction ID</label>
+                <input type="text" class="form-control" id="transactionId" name="transactionId" required>
+              </div>
+              <div class="form-group">
+                <label for="transferCode">Transfer Code</label>
+                <input type="text" class="form-control" id="transferCode" name="transferCode" required>
+              </div>
+              <button type="submit" class="btn btn-warning">Confirm Transfer</button>
             </form>
           </div>
         </div>
