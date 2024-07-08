@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  backend:
+    image: '#image'
+    container_name: cashtransfers
+    restart: always
+    ports:
+      - "80:2023"
+    environment:
+      SPRING_PROFILES_ACTIVE: main
+      SERVER_PORT: 2023
+      POSTGRES_DB: jdbc:postgresql://localhost:5432/Cash-Transfers
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  database:
+    image: postgres:15
+    restart: always
+    container_name: database
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+volumes:
+  db_data:
