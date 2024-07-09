@@ -52,11 +52,10 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(email)) {
             throw new IllegalStateException("Email already exists");
         }
-        User user = User.builder()
-                .email(email)
-                .password(passwordEncoder.encode(password))
-                .role(Role.OWNER_CARD)
-                .build();
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRole(Role.OWNER_CARD);
         userRepository.save(user);
         logger.info("Register is successfully saved");
     }

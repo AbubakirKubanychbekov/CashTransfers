@@ -11,10 +11,7 @@ import cashtransfer.cashtransfers.repositories.CashRegisterRepository;
 import cashtransfer.cashtransfers.repositories.TransferRepository;
 import cashtransfer.cashtransfers.repositories.UserRepository;
 import cashtransfer.cashtransfers.services.CashRegisterService;
-import cashtransfer.cashtransfers.services.UserService;
 import jakarta.annotation.PostConstruct;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -166,16 +163,14 @@ public class CashRegisterImpl implements CashRegisterService {
 
     @PostConstruct
     public void initMethod(){
-        User u = User.builder()
-                .firstName("Abubakir")
-                .lastName("Kubanychbekov")
-                .email("abubakir@gmail.com")
-                .password(passwordEncoder.encode("abubakir"))
-                .role(Role.OWNER_CARD)
-                .build();
+        User u = new User();
+        u.setFirstName("Abubakir");
+        u.setLastName("Kubanychbekov");
+        u.setEmail("abubakir@gmail.com");
+        u.setPassword(passwordEncoder.encode("abubakir"));
+        u.setRole(Role.OWNER_CARD);
         userRepository.save(u);
     }
-
 
     @Override
     public PaginationResponse getAllPagination(int currentPage, int pageSize) {

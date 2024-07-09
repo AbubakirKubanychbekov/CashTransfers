@@ -17,7 +17,6 @@ import java.util.List;
 public class TransferServiceImpl implements TransferService {
 
     private final TransferRepository transferRepository;
-    private final CashRegisterRepository cashRegisterRepository;
 
     @Override
     public List<Transfer> findAll() {
