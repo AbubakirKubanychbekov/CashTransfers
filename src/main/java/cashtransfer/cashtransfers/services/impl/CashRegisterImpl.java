@@ -45,10 +45,6 @@ public class CashRegisterImpl implements CashRegisterService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final TransferRepository transferRepository;
-    private final UserService userService;
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
 
     /**
